@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "goya-index-harness"
+version = "0.1.0a1"
+description = "Local-first source indexing, ranked retrieval and hash-verified context for AI applications"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "GOYA"}]
+dependencies = []
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Operating System :: POSIX",
+  "Operating System :: MacOS",
+  "Topic :: Text Processing :: Indexing",
+]
+
+[project.scripts]
+goya-index = "goya_index.cli:entrypoint"
+
+[project.urls]
+Homepage = "https://goyaos.ai/"
+Repository = "https://github.com/sarapab-th/goya-index-harness"
+Documentation = "https://github.com/sarapab-th/goya-index-harness/blob/main/docs/INSTALLATION.md"
+Issues = "https://github.com/sarapab-th/goya-index-harness/issues"
+
+[tool.setuptools.packages.find]
+include = ["goya_index*"]
+exclude = ["tests*", "examples*", "tools*"]

@@ -1,0 +1,10 @@
+include LICENSE README.md SECURITY.md CONTRIBUTING.md pyproject.toml
+recursive-include .github/ci-template *.yml
+recursive-include docs *.md
+recursive-include benchmarks *.json *.md
+recursive-include examples *.py *.md
+recursive-include tests *.py
+recursive-include tools *.py
+prune build
+prune dist
+global-exclude *.pyc *.sqlite3 *.db *.seed *.pem *.key .DS_Store
