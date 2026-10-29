@@ -3,7 +3,7 @@
 See [Benchmarks](BENCHMARKS.md) for the measured retrieval, model-comparison,
 cost, caching and endurance results, including failed and corrected runs.
 
-The earlier Index Harness engine experiment recorded a final continuous soak of
+The earlier engine experiment (HARNESS_INDEX_0) recorded a final continuous soak of
 86,400.316 seconds, 2,905 cycles and 3,775 queries, with 290 concurrency probes,
 48 restart probes and 24 fault probes. Its retained report recorded zero failures
 in that final run and zero source writes, provider calls or spend. Earlier

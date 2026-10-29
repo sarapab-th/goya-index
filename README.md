@@ -1,19 +1,19 @@
-# GOYA Index Harness
+# GOYA Index
 
 ### Give your AI the relevant source—not the whole folder.
 
-**Local-first retrieval · hash-verified excerpts · Python API + CLI · MIT**
+**Local retrieval for RAG · hash-verified excerpts · Python API + CLI · MIT**
 
-GOYA Index Harness turns a folder of source code and text into a searchable local
-catalog. Find the file or Python symbol you need, verify its bytes, and assemble
+GOYA Index is the retrieval step of RAG, run locally. It turns a folder of source
+code and text into a searchable local catalog. Find the file or Python symbol you need, verify its bytes, and assemble
 a compact context packet for your AI application. No model account, API key,
 vector database, GPU, subscription or GOYA installation is required.
 
-**Developer preview: `0.1.0a2`.** macOS tested; Linux/WSL qualification pending.
+**Developer preview: `0.1.0a3`.** macOS tested; Linux/WSL qualification pending.
 Native Windows is not supported in this preview.
 
-[GitHub](https://github.com/sarapab-th/goya-index-harness) ·
-[Download preview](https://github.com/sarapab-th/goya-index-harness/releases/tag/v0.1.0a2) ·
+[GitHub](https://github.com/sarapab-th/goya-index) ·
+[Download preview](https://github.com/sarapab-th/goya-index/releases/tag/v0.1.0a3) ·
 [CI template](.github/ci-template/tests.yml)
 
 [Quick start](#quick-start) · [Installation](docs/INSTALLATION.md) ·
@@ -48,8 +48,8 @@ Requires Python 3.10+ with SQLite FTS5 on macOS or Linux. Start inside a cloned 
 downloaded checkout; this example needs no installation or network access:
 
 ```sh
-git clone https://github.com/sarapab-th/goya-index-harness.git
-cd goya-index-harness
+git clone https://github.com/sarapab-th/goya-index.git
+cd goya-index
 python3 -B -m goya_index build --source ./examples/source --data ../goya-index-demo-data
 python3 -B -m goya_index search --data ../goya-index-demo-data --query calculate_stock_level
 python3 -B -m goya_index read --data ../goya-index-demo-data --path inventory.py
@@ -131,7 +131,7 @@ not a blind accuracy score. [Raw result](benchmarks/macos-arm64-py313-2026-09-09
 
 | Component | Job | Included here? |
 |---|---|---|
-| **Index Harness** | Select relevant, verifiable context | Yes—MIT library and CLI |
+| **GOYA Index** | Select relevant, verifiable context | Yes—MIT library and CLI |
 | **GOYA Relay** | Model gateway: connect and route to providers you choose | No—separate product; Index integration is a separate step |
 | **GOYA Guardian** | Govern actions, approval and execution within supported capabilities | No—retrieval does not confer action authority |
 | **GOYA OS** | Broader modular product direction | No—this repo is not a desktop installer or operating system |

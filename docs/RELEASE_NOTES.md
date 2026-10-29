@@ -1,3 +1,15 @@
+# 0.1.0a3 — renamed to GOYA Index
+
+- The package is now `goya-index` (was `goya-index-harness`) and the repository is
+  `sarapab-th/goya-index`. GitHub redirects the old repository address.
+- Described as what it is: the local retrieval step of RAG. It finds and verifies
+  the source; your application's model writes the answer.
+- No change to behaviour: the import (`goya_index`), the `goya-index` command,
+  the Python API and the index format are as in 0.1.0a2. Indexes built with
+  earlier versions keep working; internal format IDs still read `harness-index`.
+- To switch from an installed 0.1.0a1 or 0.1.0a2, uninstall `goya-index-harness`
+  first, since both packages provide `goya_index`.
+
 # 0.1.0a2 — "which one?"
 
 ## Added

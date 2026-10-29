@@ -22,7 +22,7 @@ The rule, in order:
      - otherwise keep the candidates with the most names, then the most path words that not all of them share;
        if that leaves one file: answer with it (which-one/1 answered only when it was the best match).
   4. Ask: name the group(s) and show at most SHOW candidates, best ranked first.
-No model. Uses only the harness's word search and its own index of file texts.
+No model. Uses only GOYA Index's word search and its own index of file texts.
 
 Rule "which-one/2". which-one/1 was tested once, blind, on fresh questions about one code base; /2 changes step 3
 after that test and has not been tested on fresh questions. See docs/BENCHMARKS.md, section 6.
@@ -111,7 +111,7 @@ def split_question(query):
 
 
 class Index:
-    """The look-alike groups and literal-name lookups over the harness's word index (lexical.sqlite3).
+    """The look-alike groups and literal-name lookups over GOYA Index's word index (lexical.sqlite3).
 
     With a catalog, files that sync changed, added or deleted are read from the catalog's sync overlay, as search
     does: a changed file's new text replaces its old text, and a deleted file drops out."""
@@ -224,7 +224,7 @@ def names_in(query, ix):
 
 
 def decide(query, ranked, ix):
-    """ranked: the harness's files, best first. Returns ("answer", {...}) or ("ask", {...})."""
+    """ranked: the search's files, best first. Returns ("answer", {...}) or ("ask", {...})."""
     if not ranked:
         return ("answer", {"path": None, "why": "no match"})
     top = ranked[0]
@@ -280,7 +280,7 @@ def decide(query, ranked, ix):
 
 
 def message(info):
-    """What the harness says instead of guessing."""
+    """What GOYA Index says instead of guessing."""
     head = "; ".join("%s files look like %s" % (format(g["count"], ","), g["pattern"]) for g in info["groups"])
     return "%s. Which one? Closest: %s" % (head, ", ".join(info["shown"]))
 

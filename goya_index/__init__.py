@@ -1,10 +1,10 @@
-"""GOYA Index Harness: local retrieval; no model calls or execution authority."""
+"""GOYA Index: local retrieval for RAG; no model calls or execution authority."""
 
 from pathlib import Path
 
 from .cli import build, engines
 
-__version__ = "0.1.0a2"
+__version__ = "0.1.0a3"
 __all__ = ["build", "search", "which_one", "read", "sync", "inventory", "context"]
 
 

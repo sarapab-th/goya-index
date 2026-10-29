@@ -31,11 +31,11 @@ class PortableIndexTests(unittest.TestCase):
     def test_arbitrary_folder_build_search_and_verified_read(self):
         result = goya_index.build(self.source, self.data)
         self.assertEqual(result["authority_granted"], "none")
-        harness, _, _ = goya_index.engines()
+        engine, _, _ = goya_index.engines()
         catalog = self.data / "catalog.sqlite3"
-        rows = harness.unified_search("calculate_stock_level", catalog=catalog)
+        rows = engine.unified_search("calculate_stock_level", catalog=catalog)
         self.assertEqual(rows[0]["source_path"], "inventory.py")
-        read = harness.read_verified_source(catalog, "inventory.py")
+        read = engine.read_verified_source(catalog, "inventory.py")
         self.assertTrue(read["verified"])
         self.assertEqual(read["content_sha256"], self.before["inventory.py"])
         self.assertEqual(self.digest(), self.before)
@@ -46,18 +46,18 @@ class PortableIndexTests(unittest.TestCase):
 
     def test_stale_read_refused_then_sync_refreshes(self):
         goya_index.build(self.source, self.data)
-        harness, _, _ = goya_index.engines()
+        engine, _, _ = goya_index.engines()
         catalog = self.data / "catalog.sqlite3"
         self.file.write_text("def calculate_stock_level():\n    return 42000\n")
-        self.assertFalse(harness.read_verified_source(catalog, "inventory.py")["verified"])
-        result = harness.incremental_sync(catalog)
+        self.assertFalse(engine.read_verified_source(catalog, "inventory.py")["verified"])
+        result = engine.incremental_sync(catalog)
         self.assertEqual(result["source_writes"], 0)
-        self.assertIn("42000", harness.read_verified_source(catalog, "inventory.py")["content"])
+        self.assertIn("42000", engine.read_verified_source(catalog, "inventory.py")["content"])
 
     def test_read_connections_close_on_normal_and_exceptional_exit(self):
         goya_index.build(self.source, self.data)
-        harness, metadata, lexical = goya_index.engines()
-        for factory, name in ((harness._ro, "catalog.sqlite3"), (metadata._connect, "metadata.sqlite3"), (lexical._connect_readonly, "lexical.sqlite3")):
+        engine, metadata, lexical = goya_index.engines()
+        for factory, name in ((engine._ro, "catalog.sqlite3"), (metadata._connect, "metadata.sqlite3"), (lexical._connect_readonly, "lexical.sqlite3")):
             with factory(self.data / name) as db:
                 self.assertEqual(db.execute("SELECT 1").fetchone()[0], 1)
             with self.assertRaises(sqlite3.ProgrammingError):
@@ -80,8 +80,8 @@ class PortableIndexTests(unittest.TestCase):
         outside.write_text("external confidential text")
         (self.source / "link.txt").symlink_to(outside)
         goya_index.build(self.source, self.data)
-        harness, _, _ = goya_index.engines()
-        self.assertFalse(harness.read_verified_source(self.data / "catalog.sqlite3", "link.txt")["verified"])
+        engine, _, _ = goya_index.engines()
+        self.assertFalse(engine.read_verified_source(self.data / "catalog.sqlite3", "link.txt")["verified"])
 
     def test_fresh_process_uses_only_explicit_catalog(self):
         goya_index.build(self.source, self.data)

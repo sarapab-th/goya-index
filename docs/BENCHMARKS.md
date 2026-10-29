@@ -31,17 +31,17 @@ anchoring makes these questions more distinctive than typical vague user request
 The result is not a human-independent benchmark or “96% correct on any question.”
 
 In the frozen 16-case extension rerun, lexical-only retrieval took a median
-107.798 ms and the indexed harness took 244.156 ms, while top-1 improved from
+107.798 ms and the full index took 244.156 ms, while top-1 improved from
 10/16 to 16/16. Additional structure can improve selection while costing time.
 
 ## 2. Paired natural-answer experiment
 
 Eight questions were sent through each arm of a paired API experiment using the
 recorded model identifier `claude-sonnet-5`: broad raw context versus selected
-harness context. This used the earlier full research profile, including state and
+index context. This used the earlier full research profile, including state and
 memory projections that this portable folder package **does not populate**.
 
-| Measure | Raw context | Harness context | Difference |
+| Measure | Raw context | Index context | Difference |
 |---|---:|---:|---:|
 | Final semantic score | 7/8 | 8/8 | One additional question passed |
 | Input tokens | — | — | 90.5% fewer, as recorded in the experiment |
@@ -52,7 +52,7 @@ Costs are those of the historical experiment, not current provider pricing or a
 subscription promise. The combined recorded cost was $0.095832. No new paid model
 calls were made to prepare this public repository.
 
-The initial exact-string evaluator scored 5/8 raw and 4/8 harness, undercounting
+The initial exact-string evaluator scored 5/8 raw and 4/8 index, undercounting
 punctuation and ordinary synonyms. A symmetric offline semantic rescore of the
 same responses produced 7/8 and 8/8 without new provider calls. The remaining raw
 failure hit its output cap before supplying two required facts. This was a tiny,
@@ -64,7 +64,7 @@ Earlier source-selection tests asked a model to identify the exact file defining
 a unique symbol. Four disjoint confirmation symbols were used after a packet
 boundary defect was found and repaired.
 
-| Recorded model / confirmation | Raw correct | Harness correct | Input-token reduction | Median latency raw → harness |
+| Recorded model / confirmation | Raw correct | Index correct | Input-token reduction | Median latency raw → index |
 |---|---:|---:|---:|---|
 | Local `gemma3:4b` | 3/4 | 4/4 | 68.4% | 10.9 s → 5.0 s |
 | Local `gemma4:12b-it-q4_K_M` | 2/4 | 4/4 | 68.3% | 36.5 s → 17.0 s |
@@ -75,7 +75,7 @@ difference was only 102 → 101 tokens. Do not infer lower latency or substantia
 shorter answers just from context compression.
 
 On the earlier long-context cases (64,000 raw characters, 120-second timeout),
-both local model arms timed out on all four raw cases, while the harness answered
+both local model arms timed out on all four raw cases, while the index arm answered
 4/4 for each with 93.6% fewer context characters. That is a constrained
 source-selection result, not proof of general reasoning across long documents.
 
@@ -84,7 +84,7 @@ source-selection result, not proof of general reasoning across long documents.
 A separate eight-call Anthropic confirmation used two longer-answer tasks per
 arm and a two-question cold/warm cache sequence per arm:
 
-| Measurement | Raw | Harness | Difference |
+| Measurement | Raw | Index | Difference |
 |---|---:|---:|---:|
 | Output-arm input tokens | 13,523 | 6,382 | 52.81% fewer |
 | Output-arm output tokens | 425 | 381 | 10.35% fewer |
@@ -93,7 +93,7 @@ arm and a two-question cold/warm cache sequence per arm:
 | Warm cache-read tokens | 7,132 | 3,063 | 57.05% fewer |
 
 Both arms had observed cache writes and reads. Retrieval reduced the prefix;
-caching reused it. The harness warm response was slower in this tiny sample.
+caching reused it. The index arm's warm response was slower in this tiny sample.
 Four fenced-JSON responses were initially rejected by a strict parser and later
 normalized offline; the original failures and responses were retained. Cache
 fields were **not measured** in the earlier source-selection confirmation and must
@@ -117,10 +117,10 @@ interrupted attempts. The final report records:
 | Declared volatile-stale maximum | 7 |
 | RSS growth | 68.33 MiB; inside the experiment's 256 MiB gate |
 | Open file descriptors, initial → final | 6 → 6 |
-| Harness source writes / provider calls / spend | 0 / 0 / $0 |
+| Index source writes / provider calls / spend | 0 / 0 / $0 |
 
 The runner deliberately changed synthetic/source-test inputs to test refresh;
-“zero source writes” refers to the harness, not an absence of test mutations.
+“zero source writes” refers to the index, not an absence of test mutations.
 Full SQLite integrity validation passed. Earlier stale-file incidents and a
 16-hour-39-minute interrupted run remain part of the record; the passing final
 run does not erase them. The public profile does not import private volatile-path
@@ -177,7 +177,7 @@ answers (17 of 71); at least 5 useful asks and twice the asks on right answers
 - 25 vague questions about look-alike files were not asked about: they describe a
   file's contents without naming its kind ("the 'authority' field in a recorded
   call"), and the first result was some other, uniquely named file.
-- 8 asks named the wrong group, so they still miss; the harness asks instead of
+- 8 asks named the wrong group, so they still miss; GOYA Index asks instead of
   stating a wrong file.
 - 29 were plain search misses on uniquely named files. Asking cannot fix these.
 

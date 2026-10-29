@@ -3,9 +3,9 @@ requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "goya-index-harness"
-version = "0.1.0a2"
-description = "Local-first source indexing, ranked retrieval and hash-verified context for AI applications"
+name = "goya-index"
+version = "0.1.0a3"
+description = "Local retrieval for RAG: source indexing, ranked search and hash-verified context, with no model calls"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -25,9 +25,9 @@ goya-index = "goya_index.cli:entrypoint"
 
 [project.urls]
 Homepage = "https://goyaos.ai/"
-Repository = "https://github.com/sarapab-th/goya-index-harness"
-Documentation = "https://github.com/sarapab-th/goya-index-harness/blob/main/docs/INSTALLATION.md"
-Issues = "https://github.com/sarapab-th/goya-index-harness/issues"
+Repository = "https://github.com/sarapab-th/goya-index"
+Documentation = "https://github.com/sarapab-th/goya-index/blob/main/docs/INSTALLATION.md"
+Issues = "https://github.com/sarapab-th/goya-index/issues"
 
 [tool.setuptools.packages.find]
 include = ["goya_index*"]

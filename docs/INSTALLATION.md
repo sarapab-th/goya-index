@@ -23,13 +23,13 @@ needed to use the library. See [release notes](RELEASE_NOTES.md) for recorded ru
 Clone the public repository:
 
 ```sh
-git clone https://github.com/sarapab-th/goya-index-harness.git
-cd goya-index-harness
+git clone https://github.com/sarapab-th/goya-index.git
+cd goya-index
 ```
 
 Or use **Code → Download ZIP**, extract it, and open a terminal in the extracted
 directory containing `pyproject.toml` and `goya_index/`.
-[Release archives and wheel](https://github.com/sarapab-th/goya-index-harness/releases/tag/v0.1.0a2)
+[Release archives and wheel](https://github.com/sarapab-th/goya-index/releases/tag/v0.1.0a3)
 are available separately. This package is not published on PyPI.
 
 ## 2. Check Python and SQLite
@@ -74,7 +74,7 @@ Do not use `sudo pip` or install into the system Python.
 For an already downloaded wheel and a virtual environment with pip:
 
 ```sh
-.venv/bin/python -m pip install --no-index --no-deps /path/to/goya_index_harness-0.1.0a2-py3-none-any.whl
+.venv/bin/python -m pip install --no-index --no-deps /path/to/goya_index-0.1.0a3-py3-none-any.whl
 ```
 
 This command needs an actual release wheel; it does not download one. A

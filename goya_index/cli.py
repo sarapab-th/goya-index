@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Portable local entrypoint for the retained Index Harness engines.
+"""Portable local entrypoint for the retained GOYA Index engines.
 
 Uses the original metadata, lexical and catalog engines. The portable profile
 starts with empty research-only projections instead of inventing experiments,
@@ -53,13 +53,13 @@ def build(source, data):
         raise ValueError("Index data must be outside the source directory")
     if data.exists():
         raise ValueError("Choose a new, absent data directory; existing catalogs are preserved")
-    harness, metadata, lexical = engines()
+    engine, metadata, lexical = engines()
     data.mkdir(parents=True, mode=0o700)
     p1, p2, advanced = (data / name for name in ("metadata.sqlite3", "lexical.sqlite3", "projections.sqlite3"))
-    metadata.build_index(source, p1, harness.HASH_MAX_BYTES)
-    lexical.build_lexical_index(p1, p2, content_max_bytes=harness.CONTENT_MAX_BYTES)
+    metadata.build_index(source, p1, engine.HASH_MAX_BYTES)
+    lexical.build_lexical_index(p1, p2, content_max_bytes=engine.CONTENT_MAX_BYTES)
     empty_projections(advanced)
-    result = harness.build_catalog(data / "catalog.sqlite3", phase1=p1, phase2=p2, phase3=None, advanced=advanced)
+    result = engine.build_catalog(data / "catalog.sqlite3", phase1=p1, phase2=p2, phase3=None, advanced=advanced)
     result["profile"] = "portable_folder_no_vectors"
     result["historical_soak_applies_to"] = "retained engine; this portable wrapper has separate fresh tests"
     (data / "build.json").write_text(json.dumps(result, indent=2) + "\n")
@@ -80,14 +80,14 @@ def main(argv=None):
             parser.error("build requires --source")
         result = build(args.source, args.data)
     else:
-        harness, _, _ = engines()
+        engine, _, _ = engines()
         catalog = args.data.resolve(strict=True) / "catalog.sqlite3"
         if not catalog.is_file():
             parser.error("No catalog exists at the supplied data directory")
         if args.command == "search":
             if not args.query:
                 parser.error("search requires --query")
-            result = harness.unified_search(args.query, catalog=catalog, limit=10, use_semantic=False)
+            result = engine.unified_search(args.query, catalog=catalog, limit=10, use_semantic=False)
         elif args.command == "which":
             if not args.query:
                 parser.error("which requires --query")
@@ -101,11 +101,11 @@ def main(argv=None):
         elif args.command == "read":
             if not args.path or Path(args.path).is_absolute() or ".." in Path(args.path).parts:
                 parser.error("read requires a relative path within the indexed source")
-            result = harness.read_verified_source(catalog, args.path)
+            result = engine.read_verified_source(catalog, args.path)
         elif args.command == "sync":
-            result = harness.incremental_sync(catalog)
+            result = engine.incremental_sync(catalog)
         else:
-            result = harness.inventory(catalog)
+            result = engine.inventory(catalog)
     print(json.dumps(result, indent=2, sort_keys=True))
 
 

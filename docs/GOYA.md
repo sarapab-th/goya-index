@@ -7,7 +7,7 @@ a useful component without buying or installing the whole stack.
 
 | Component | Main question | Relationship to this repository |
 |---|---|---|
-| **Index Harness** | What source is relevant, and do these bytes still match? | This standalone MIT package |
+| **GOYA Index** | What source is relevant, and do these bytes still match? | This standalone MIT package |
 | **GOYA Relay** | Which model/provider should handle this request? | Separate model-gateway product; optional Index context is the integration direction |
 | **GOYA Guardian** | Is this exact action authorized within the supported execution boundary? | Separate governance product, not conferred by indexing |
 | **GOYA OS** | How do these modules fit into a broader AI workspace? | Product direction, not a replacement OS or complete installer in this repo |
@@ -29,7 +29,7 @@ planned Relay bundle does not change this repository's license.
 
 ## Downloads and access
 
-- **Index Harness:** get this repository's source and follow [Installation](INSTALLATION.md).
+- **GOYA Index:** get this repository's source and follow [Installation](INSTALLATION.md).
 - **GOYA products and access:** [goyaos.ai](https://goyaos.ai/).
 - **Product information:** [GOYA product page](https://goyaos.ai/product).
 
