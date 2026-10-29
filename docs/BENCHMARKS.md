@@ -202,6 +202,20 @@ answers (17 of 71); at least 5 useful asks and twice the asks on right answers
 The packaged `which_one()` was replayed on all 220 questions against the same index
 and gave the same decision, shown list and top five as the tested rule on every one.
 
+**Change after the test: `which-one/2` (the packaged rule now).** When the
+question's names or folder words narrowed the look-alikes to one file that search
+had not ranked first, `which-one/1` still asked, with that one file as the only
+choice. `/2` answers with that file. This change was made after seeing the results
+above and has **not** been tested on fresh questions. On the same 220 questions it
+changes 2 decisions, both on vague questions: each was an ask whose single choice
+was the right file, and each is now a right answer.
+
+| Same 220 questions (seen) | Right answers | Wrong answers | Asks | Asks on right answers |
+|---|---:|---:|---:|---:|
+| `which-one/1`, vague | 47 | 54 | 19 | 2 |
+| `which-one/2`, vague | 49 | 54 | 17 | 2 |
+| Both, specific | 95 | 5 | 0 | 0 |
+
 ## Reproduce the public-package smoke benchmark
 
 From this checkout, with macOS/Linux Python:

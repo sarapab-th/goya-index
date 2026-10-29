@@ -20,11 +20,12 @@ The rule, in order:
   3. The question's names and path words decide between the candidates and the best match:
      - the best match has more of the question's names than any other candidate: answer with the best match;
      - otherwise keep the candidates with the most names, then the most path words that not all of them share;
-       if that leaves just the best match: answer with the best match.
+       if that leaves one file: answer with it (which-one/1 answered only when it was the best match).
   4. Ask: name the group(s) and show at most SHOW candidates, best ranked first.
 No model. Uses only the harness's word search and its own index of file texts.
 
-Rule "which-one/1". It was tested once, blind, on fresh questions about one code base; see docs/BENCHMARKS.md, section 6.
+Rule "which-one/2". which-one/1 was tested once, blind, on fresh questions about one code base; /2 changes step 3
+after that test and has not been tested on fresh questions. See docs/BENCHMARKS.md, section 6.
 """
 from __future__ import annotations
 
@@ -36,7 +37,7 @@ import sqlite3
 import threading
 from pathlib import Path
 
-RULE = "which-one/1"
+RULE = "which-one/2"
 RANKED_LIMIT = 50  # how many search results the rule looks at, as tested
 
 HEX = re.compile(r"(?<![0-9a-z])(?=[0-9a-f]*\d)[0-9a-f]{6,}(?![0-9a-z])")
@@ -270,8 +271,8 @@ def decide(query, ranked, ix):
         m = max(ph.values())
         if m > 0:
             cands, narrowed = [p for p in cands if ph[p] == m], True
-    if cands == [top]:
-        return ("answer", {"path": top, "why": "the question says which one"})
+    if len(cands) == 1:  # which-one/2: the one file left, even when search ranked another file first
+        return ("answer", {"path": cands[0], "why": "the question says which one"})
     rank = {p: i for i, p in enumerate(ranked)}
     shown = sorted(cands, key=lambda p: (rank.get(p, 10 ** 6), p))[:SHOW]
     return ("ask", {"groups": [{"pattern": g, "count": len(ix.members[g])} for g in groups],

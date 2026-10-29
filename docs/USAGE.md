@@ -76,18 +76,20 @@ else:
 | `groups` | For an ask: each look-alike pattern and how many files fit it |
 | `shown`, `candidates` | For an ask: up to 5 closest files, best ranked first, and how many remain |
 | `results` | The search's top 5 files either way |
-| `rule`, `model_calls` | `"which-one/1"` and `0` |
+| `rule`, `model_calls` | `"which-one/2"` and `0` |
 
 It answers when the question names something rare that the best match has (a code
 name such as `score_beta`, or a word in at most 3 files), when there are no
 look-alikes, or when the question's names or folder words single out one copy
-("the beta scoring module"). It follows `sync`: added, changed and deleted files
+("the beta scoring module"), even if search ranked another file first. It follows `sync`: added, changed and deleted files
 count as search sees them. An answer is still not a guarantee that the file is the
 right one; an ask is a cue to show the person the choices.
 
-The rule was tested once, blind, on one private code base: on vague questions it cut
-wrong answers from 71 to 54 of 120, and it asked on none of 100 specific ones. Its
-words for file types were written for that code base. See
+The first version of the rule was tested once, blind, on one private code base: on
+vague questions it cut wrong answers from 71 to 54 of 120, and it asked on none of
+100 specific ones. The current version answers directly in 2 of those asks (both
+right); that change came after the test. Its words for file types were written for
+that code base. See
 [Benchmarks](BENCHMARKS.md#6-which-one-on-vague-questions-29-october-2026).
 
 `search` and `context` accept nonempty string queries and limits from 1 to 100.

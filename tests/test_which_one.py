@@ -41,7 +41,7 @@ class WhichOneTests(unittest.TestCase):
         self.assertEqual(sorted(result["shown"]), sorted(f"{n}/scoring.py" for n in COPIES))
         self.assertIn("4 files look like */scoring.py. Which one?", result["message"])
         self.assertEqual(result["model_calls"], 0)
-        self.assertEqual(result["rule"], "which-one/1")
+        self.assertEqual(result["rule"], "which-one/2")
         self.assertEqual(self.digest(), before)
 
     def test_specific_questions_answer(self):
@@ -51,6 +51,20 @@ class WhichOneTests(unittest.TestCase):
         self.assertEqual((result["action"], result["path"]), ("answer", "gamma/scoring.py"))
         result = goya_index.which_one(self.data, "calculate_stock_level")
         self.assertEqual((result["action"], result["path"]), ("answer", "inventory.py"))
+
+    def test_folder_word_answers_even_when_search_ranks_another_file_first(self):
+        source = self.root / "same text"
+        for name in COPIES:
+            (source / name).mkdir(parents=True)
+            (source / name / "scoring.py").write_text("def score(x):\n    return x\n")
+        (source / "scoring_module_notes.md").write_text(
+            "The scoring module notes.\nEach scoring module returns a number. The scoring module in each folder differs.\n")
+        data = self.root / "same text catalog"
+        goya_index.build(source, data)
+        result = goya_index.which_one(data, "the scoring module in gamma")
+        self.assertEqual(result["results"][0], "scoring_module_notes.md")
+        self.assertEqual((result["action"], result["path"]), ("answer", "gamma/scoring.py"))
+        self.assertEqual(result["rule"], "which-one/2")
 
     def test_groups_follow_sync(self):
         epsilon = self.source / "epsilon"
