@@ -1,3 +1,16 @@
+# Unreleased: "which one?"
+
+- `which_one(data, query)` and the `which` CLI command: search, then answer with
+  one file, or ask "which one?" when look-alike files compete for a vague question.
+  No model. Rule `which-one/1`; it follows `sync` the way search does.
+- Tests: 4 new synthetic tests (23 in all) passed on macOS with Python 3.13.15 and
+  3.9.6, from source. The wheel was not rebuilt and `tools/check_release.py` was not
+  run for this change.
+- The packaged rule was replayed on the 220 questions of its blind test and matched
+  the tested rule on every decision. Results and limits:
+  [Benchmarks §6](BENCHMARKS.md#6-which-one-on-vague-questions-29-october-2026).
+- Version is still 0.1.0a1; nothing has been published.
+
 # 0.1.0a1 — standalone developer preview
 
 ## Included

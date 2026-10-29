@@ -5,7 +5,7 @@ from pathlib import Path
 from .cli import build, engines
 
 __version__ = "0.1.0a1"
-__all__ = ["build", "search", "read", "sync", "inventory", "context"]
+__all__ = ["build", "search", "which_one", "read", "sync", "inventory", "context"]
 
 
 def _catalog(data):
@@ -23,6 +23,22 @@ def search(data, query, *, limit=10):
         raise ValueError("limit must be between 1 and 100")
     catalog, _, _ = engines()
     return catalog.unified_search(query, catalog=_catalog(data), limit=limit, use_semantic=False)
+
+
+def which_one(data, query):
+    """Search, then answer with the best file or ask "which one?" when look-alike files compete.
+
+    Returns {"action": "answer", "path": ..., "why": ...} or {"action": "ask", "message": ..., "groups": [...],
+    "shown": [...]}, plus the top results. No model calls. An answer is not an assertion of correctness."""
+    if not isinstance(query, str) or not query.strip():
+        raise ValueError("query must not be empty")
+    from ._engine import which_one as rule
+    catalog, _, _ = engines()
+    path = _catalog(data)
+    with catalog._catalog_lock(path, exclusive=False):  # one catalog generation for search and rule
+        rows = catalog.unified_search(query, catalog=path, limit=rule.RANKED_LIMIT, use_semantic=False)
+        lexical = catalog._component_path(path, "phase2", path.parent / "lexical.sqlite3")
+        return rule.which_one(query, rows, lexical, catalog=path)
 
 
 def read(data, path):

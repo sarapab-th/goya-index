@@ -23,6 +23,7 @@ Native Windows is not supported in this preview.
 ## What you get
 
 - **Find:** SQLite FTS5 lexical search, source-path ranking and Python symbol lookup.
+- **Ask, don't guess:** when a vague question fits many look-alike files, `which_one` asks "which one?" and shows the closest.
 - **Verify:** refuse stale or changed content when its bytes disagree with the catalog.
 - **Prepare context:** ranked excerpts, source paths and SHA-256 digests within a character budget.
 - **Stay current:** incremental synchronization after source changes.
@@ -31,7 +32,8 @@ Native Windows is not supported in this preview.
 
 Useful for repository Q&A, developer assistants, internal-document lookup and
 local context preparation. Distinctive, answerable queries work best; vague
-questions still need clarification. Indexing is not a promise of correct answers.
+questions still need clarification, and `which_one` asks for it in some of those
+cases. Indexing is not a promise of correct answers.
 
 ```text
 Your chosen folder → local index → ranked, verified excerpts → your AI application
@@ -114,6 +116,11 @@ profile**. Savings vary by workload; these results do not establish universal
 accuracy, speed or cost reductions.
 
 Read the [methods, failures, full comparisons and reproducible local benchmark](docs/BENCHMARKS.md).
+
+**"Which one?" (29 October 2026):** one blind run on a private code base, with
+model-written questions. On 120 vague questions, asking instead of guessing cut
+wrong answers from 71 to 54; on 100 specific questions it never asked. The person's
+reply was simulated. [Details and limits](docs/BENCHMARKS.md#6-which-one-on-vague-questions-29-october-2026).
 
 **Fresh package check:** 19 tests passed on macOS. The included 100-file synthetic
 benchmark returned 30/30 expected first results and verified every read and packet;

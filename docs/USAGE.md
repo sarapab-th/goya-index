@@ -21,6 +21,7 @@ argument/runtime errors use stderr and nonzero exit status.
 |---|---|---|
 | `build` | `--source PATH` | Create catalogs; refuse existing data directory |
 | `search` | `--query TEXT` | Rank up to 10 local matches |
+| `which` | `--query TEXT` | Answer with one file, or ask "which one?" when look-alike files compete |
 | `read` | `--path RELATIVE_PATH` | Read one indexed source and verify its hash |
 | `context` | `--query TEXT`, optional `--max-chars N` | Produce excerpts; default 4,000 characters |
 | `sync` | None | Refresh derived data for the original source root |
@@ -48,6 +49,46 @@ packet = context("../private-index", "calculate_stock_level", max_chars=2000, li
 stats = inventory("../private-index")
 # Call sync("../private-index") after a legitimate source change.
 ```
+
+## Ask "which one?" instead of guessing
+
+A vague question often fits many look-alike files: "the scoring module" when there
+are four `scoring.py` in different folders, or "the loop JSON file" when there are
+hundreds of `run-0001/loop.json`, `run-0002/loop.json` and so on. Search still ranks
+one of them first. `which_one` notices this and asks instead.
+
+```python
+from goya_index import which_one
+
+result = which_one("../private-index", "the scoring module")
+if result["action"] == "ask":
+    print(result["message"])
+    # 4 files look like */scoring.py. Which one? Closest: alpha/scoring.py, beta/scoring.py, ...
+else:
+    print(result["path"], result["why"])
+```
+
+| Field | Meaning |
+|---|---|
+| `action` | `"answer"` or `"ask"` |
+| `path`, `why` | For an answer: the best match and the reason it is safe to give one file |
+| `message` | For an ask: the question to show the person |
+| `groups` | For an ask: each look-alike pattern and how many files fit it |
+| `shown`, `candidates` | For an ask: up to 5 closest files, best ranked first, and how many remain |
+| `results` | The search's top 5 files either way |
+| `rule`, `model_calls` | `"which-one/1"` and `0` |
+
+It answers when the question names something rare that the best match has (a code
+name such as `score_beta`, or a word in at most 3 files), when there are no
+look-alikes, or when the question's names or folder words single out one copy
+("the beta scoring module"). It follows `sync`: added, changed and deleted files
+count as search sees them. An answer is still not a guarantee that the file is the
+right one; an ask is a cue to show the person the choices.
+
+The rule was tested once, blind, on one private code base: on vague questions it cut
+wrong answers from 71 to 54 of 120, and it asked on none of 100 specific ones. Its
+words for file types were written for that code base. See
+[Benchmarks](BENCHMARKS.md#6-which-one-on-vague-questions-29-october-2026).
 
 `search` and `context` accept nonempty string queries and limits from 1 to 100.
 `context` accepts 256–100,000 characters. This is a **character budget**, not a

@@ -149,6 +149,59 @@ typed-state results do not imply that the portable folder API includes populated
 memory/authority/relationship features. The private experiments are not a fair
 head-to-head product comparison with commercial retrieval services.
 
+## 6. "Which one?" on vague questions (29 October 2026)
+
+Most vague questions the search gets wrong point at one of many look-alike files:
+"the loop JSON file" when there are 1,050 `loop.json`, "the scoring module" when
+there are four `scoring.py`. No search can pick the right copy from such a question.
+`which_one()` asks instead of guessing (rule `which-one/1`, no model). The rule and
+its pass bar were fixed before the test. It ran once on two fresh question sets,
+sealed and scored in one process, over a private code base of 5,494 indexed files.
+
+| Fresh set | Questions | Search first result right | Wrong | Asks | Asks on wrong answers | Useful asks* | Asks on right answers | Wrong answers left |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Vague | 120 | 49 | 71 | 19 | 17 | 9 | 2 | **54** |
+| Specific (exact code names) | 100 | 95 | 5 | **0** | 0 | 0 | 0 | 5 |
+
+\* The search was wrong and the person's reply can reach the right file: in 5, the
+right file is in the shown list; in 4, it is in the asked-about group, so the person
+would have to say which copy they mean. In the 2 asks on right answers, the right
+file was shown first.
+
+All three pre-registered conditions passed: asks on at least 15% of vague wrong
+answers (17 of 71); at least 5 useful asks and twice the asks on right answers
+(9 vs 2); specific asks on at most 5% of questions and at most 2 on right answers
+(0). The rule took a median 2.93 ms per question on top of the search.
+
+**What it does not fix:**
+- 25 vague questions about look-alike files were not asked about: they describe a
+  file's contents without naming its kind ("the 'authority' field in a recorded
+  call"), and the first result was some other, uniquely named file.
+- 8 asks named the wrong group, so they still miss; the harness asks instead of
+  stating a wrong file.
+- 29 were plain search misses on uniquely named files. Asking cannot fix these.
+
+**Limits:**
+- A local model, gemma4:e4b, wrote every question. No person did.
+- The person's reply is simulated: "in the group" assumes someone who knows which
+  copy they meant can say so.
+- The specific set reuses files from the earlier v2/v3 sets, with new questions,
+  because few files with distinctive names were left.
+- The kind and type words in the rule (`TYPE_WORDS`) were written while looking at
+  this one code base. Other code bases are untested.
+- Before the run, a pipeline check showed totals for 6 of the specific questions
+  (5 right, 0 asks). The rule was not changed afterwards.
+
+| Internal record | SHA-256 |
+|---|---|
+| Rule as tested | `07dd58088f9580d8cda835d216e0bb4418ac144ccce8b7e2f0b1f344148eaa41` |
+| Fresh vague questions | `ffd5684bb50ccfe4aadd35d58692ffad9d5c8118df63873be830f1a3091f7afc` |
+| Fresh specific questions | `ac0275f47b5b4a782e7e7bd588716a41912f5216b4f45f97e2ae7b2acd4de371` |
+| Per-question results | `96ceeda9bca472c2fa6c74371cb9f87d054b0d89d44f70a671b4a21528a8ba9c` |
+
+The packaged `which_one()` was replayed on all 220 questions against the same index
+and gave the same decision, shown list and top five as the tested rule on every one.
+
 ## Reproduce the public-package smoke benchmark
 
 From this checkout, with macOS/Linux Python:

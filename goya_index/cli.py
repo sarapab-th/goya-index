@@ -68,7 +68,7 @@ def build(source, data):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="GOYA Index — local source search, no model calls")
-    parser.add_argument("command", choices=["build", "search", "read", "sync", "inventory", "context"])
+    parser.add_argument("command", choices=["build", "search", "which", "read", "sync", "inventory", "context"])
     parser.add_argument("--data", required=True, type=Path)
     parser.add_argument("--source", type=Path)
     parser.add_argument("--query")
@@ -88,6 +88,11 @@ def main(argv=None):
             if not args.query:
                 parser.error("search requires --query")
             result = harness.unified_search(args.query, catalog=catalog, limit=10, use_semantic=False)
+        elif args.command == "which":
+            if not args.query:
+                parser.error("which requires --query")
+            from . import which_one
+            result = which_one(args.data, args.query)
         elif args.command == "context":
             if not args.query:
                 parser.error("context requires --query")
