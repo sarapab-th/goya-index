@@ -9,11 +9,11 @@ catalog. Find the file or Python symbol you need, verify its bytes, and assemble
 a compact context packet for your AI application. No model account, API key,
 vector database, GPU, subscription or GOYA installation is required.
 
-**Developer preview: `0.1.0a1`.** macOS tested; Linux/WSL qualification pending.
+**Developer preview: `0.1.0a2`.** macOS tested; Linux/WSL qualification pending.
 Native Windows is not supported in this preview.
 
 [GitHub](https://github.com/sarapab-th/goya-index-harness) ·
-[Download preview](https://github.com/sarapab-th/goya-index-harness/releases/tag/v0.1.0a1) ·
+[Download preview](https://github.com/sarapab-th/goya-index-harness/releases/tag/v0.1.0a2) ·
 [CI template](.github/ci-template/tests.yml)
 
 [Quick start](#quick-start) · [Installation](docs/INSTALLATION.md) ·
@@ -122,7 +122,7 @@ model-written questions. On 120 vague questions, asking instead of guessing cut
 wrong answers from 71 to 54; on 100 specific questions it never asked. The person's
 reply was simulated. [Details and limits](docs/BENCHMARKS.md#6-which-one-on-vague-questions-29-october-2026).
 
-**Fresh package check:** 19 tests passed on macOS. The included 100-file synthetic
+**Fresh package check (0.1.0a1, 9 September):** 19 tests passed on macOS. The included 100-file synthetic
 benchmark returned 30/30 expected first results and verified every read and packet;
 median search was 2.84 ms on that Mac. This small exact-symbol check is reproducible,
 not a blind accuracy score. [Raw result](benchmarks/macos-arm64-py313-2026-09-09.json).

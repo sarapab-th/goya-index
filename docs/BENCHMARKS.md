@@ -126,7 +126,7 @@ Full SQLite integrity validation passed. Earlier stale-file incidents and a
 run does not erase them. The public profile does not import private volatile-path
 exceptions from that deployment.
 
-**This is not a fresh 24-hour soak of version 0.1.0a1.** The portable wrapper,
+**This is not a fresh 24-hour soak of the 0.1.0 previews (0.1.0a1, 0.1.0a2).** The portable wrapper,
 packaging and excluded projections have their own tests and still need endurance
 qualification as a distributed product.
 

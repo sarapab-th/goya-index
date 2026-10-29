@@ -4,7 +4,7 @@ from pathlib import Path
 
 from .cli import build, engines
 
-__version__ = "0.1.0a1"
+__version__ = "0.1.0a2"
 __all__ = ["build", "search", "which_one", "read", "sync", "inventory", "context"]
 
 
